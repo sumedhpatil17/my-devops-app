@@ -1,0 +1,6 @@
+cd my-devops-app
+git pull                                //pull latest update from git
+docker ps                               //check docker process
+docker stop "CONTAINER ID"              //stop previous running container
+docker build -t myapp .                 //build the app
+docker run -d -p 80:80 myapp            //run the docker
