@@ -1,0 +1,28 @@
+name: Deploy App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: SSH into server and deploy
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.HOST }}
+        username: ubuntu
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          cd my-devops-app
+          git pull
+          docker stop $(docker ps -q) || true
+          docker rm $(docker ps -aq) || true
+          docker build -t myapp .
+          docker run -d -p 80:80 myapp
